@@ -1,7 +1,23 @@
 const mongoose = require("mongoose")
 
-const courseSchema = mongoose.Schema({
-    
+const courseSchema = new mongoose.Schema({
+    title: {
+        type: String
+    },
+    description: {
+        type: String
+    },
+    price: {
+        type: Number
+    },
+    creatorId: {
+        type: mongoose.Schema.Types.ObjectId
+    },
+    imageUrl: {
+        type: string
+    }
+},{
+    timestamps: true
 })
 
 

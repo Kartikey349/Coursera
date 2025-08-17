@@ -18,7 +18,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         trim: true,
-        maxLength: 50,
+        maxLength: 100,
         minLength: 8
     }
 },

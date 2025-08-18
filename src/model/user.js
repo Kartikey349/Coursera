@@ -46,7 +46,7 @@ const adminSchema = new mongoose.Schema({
         type: String,
         required: true,
         trim: true,
-        maxLength: 50,
+        maxLength: 100,
         minLength: 8
     }
 })
@@ -58,9 +58,13 @@ const purchaseSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
     },
-    adminId: {
+    creatorId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Admin"
+    },
+    courseId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Course"
     }
 },{
     timestamps: true
@@ -68,7 +72,7 @@ const purchaseSchema = new mongoose.Schema({
 
 
 
-const User = mongoose.model("users", userSchema)
+const User = mongoose.model("User", userSchema)
 const Admin = mongoose.model("admins", adminSchema)
 const Purchased = mongoose.model("purchased", purchaseSchema)
 

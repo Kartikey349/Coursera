@@ -1,10 +1,11 @@
 const express = require("express");
 const userRouter = express.Router()
 const signupValidation = require("../utils/validator")
-const {User} = require("../model/user")
+const {User, Purchased} = require("../model/user")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
-const userAuth = require("../middleware/auth")
+const userAuth = require("../middleware/auth");
+const Course = require("../model/course");
 
 userRouter.post("/signup", async(req,res) => {
    const {
@@ -35,7 +36,6 @@ userRouter.post("/signup", async(req,res) => {
 
         await user.save();
         res.send("Successfully Signed Up")
-
 
     }catch(err){
         res.status(500).send("ERROR: " + err.message)
@@ -76,9 +76,48 @@ userRouter.post("/login", async(req,res) => {
 })
 
 
-userRouter.post("/purchase", userAuth, (req, res) => {
-    const user = req.user
-    res.send(user)
+userRouter.post("/purchase", userAuth, async (req, res) => {
+    const user = req.user;
+
+    const {
+        courseId
+    } = req.body
+
+    try{
+        const course = await Course.findById(courseId);
+        
+        if(!course){
+            throw new Error("course does not exist");
+        }
+
+
+        const purchased = await Purchased.findOne({
+            userId: user._id,
+            courseId
+        })
+        if(purchased){
+            throw new Error("already purchased course")
+        }
+
+
+        const coursePurchase = new Purchased({
+            userId: user._id,
+            courseId,
+            creatorId: course.creatorId
+        })
+
+
+        await coursePurchase.save();
+
+        const populatedPurchase = await Purchased.findById(coursePurchase._id)
+        .populate("courseId", "title description price")
+        .populate("userId", "firstName emailId")
+
+        res.send(populatedPurchase);
+
+    }catch(err){
+        res.status(404).send("ERROR: "+ err.message)
+    }
 })
 
 module.exports = userRouter;

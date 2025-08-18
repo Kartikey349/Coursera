@@ -14,7 +14,7 @@ const courseSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId
     },
     imageUrl: {
-        type: string
+        type: String
     }
 },{
     timestamps: true
@@ -22,5 +22,5 @@ const courseSchema = new mongoose.Schema({
 
 
 
-const Course = mongoose.model("courses", courseSchema)
+const Course = mongoose.model("Course", courseSchema)
 module.exports = Course;

@@ -79,7 +79,6 @@ adminRouter.post("/login", async(req,res) => {
 
 adminRouter.post("/course",adminAuth, async(req,res) => {
     const admin = req.admin;
-
     const {
         title,
         description,
